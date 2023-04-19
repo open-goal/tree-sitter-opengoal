@@ -1,4 +1,5 @@
 // Heavily stripped down - https://github.com/sogaiu/tree-sitter-clojure/
+// TODO - incorporate some CL ideas from https://github.com/theHamsta/tree-sitter-commonlisp/blob/master/grammar.js
 
 // java.lang.Character.isWhitespace
 //
@@ -68,6 +69,7 @@ const FLOAT =
 const INTEGER =
   seq(repeat1(DIGIT));
 
+// TODO - does OG support negative hex/binary?
 const NUMBER =
   token(prec(10, seq(optional(/[+-]/),
     choice(HEX_NUMBER,
@@ -104,22 +106,33 @@ const STRING =
       repeat(/[^"\\]/))),
     '"'));
 
-const NAMED_CHAR =
-  choice("backspace",
-    "formfeed",
-    "newline",
-    "return",
-    "space",
-    "tab");
-
 const ANY_CHAR =
   /.|\n/;
 
 const CHARACTER =
-  token(seq("\\",
-    choice(NAMED_CHAR,
-      ANY_CHAR)));
+  token(seq("#\\",
+    choice(ANY_CHAR, "\\s", "\\n", "\\t")));
 
+// \u000B => <vertical tab>
+// \u001C => <file separator>
+// \u001D => <group separator>
+// \u001E => <record separator>
+// \u001F => <unit separator>
+// \u2028 => <line separator>
+// \u2029 => <paragraph separator>
+// \u1680 => <ogham space mark>
+// \u2000 => <en quad>
+// \u2001 => <em quad>
+// \u2002 => <en space>
+// \u2003 => <em space>
+// \u2004 => <three-per-em space>
+// \u2005 => <four-per-em space>
+// \u2006 => <six-per-em space>
+// \u2008 => <punctuation space>
+// \u2009 => <thin space>
+// \u200a => <hair space>
+// \u205f => <medium mathematical space>
+// \u3000 => <ideographic space>
 const SYMBOL_HEAD =
   /[^\f\n\r\t \/()\[\]{}"@~^;`\\,:#'0-9\u000B\u001C\u001D\u001E\u001F\u2028\u2029\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2008\u2009\u200a\u205f\u3000]/;
 
@@ -219,7 +232,7 @@ module.exports = grammar({
       seq(choice($._sym_unqualified)),
 
     _sym_unqualified: $ =>
-      field('name', alias(choice(SYMBOL),
+      field('name', alias(choice("/", SYMBOL),
         $.sym_name)),
 
     list_lit: $ =>
@@ -252,9 +265,3 @@ module.exports = grammar({
         field('value', $._form)),
   }
 });
-
-// Local Variables:
-// mode: js-mode
-// js-indent-align-list-continuation: t
-// js-indent-level: 2
-// End:
