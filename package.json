@@ -1,0 +1,27 @@
+{
+  "name": "tree-sitter-opengoal",
+  "version": "1.0.0",
+  "description": "A tree sitter parser for the OpenGOAL language",
+  "main": "bindings/node",
+  "scripts": {
+    "gen": "npx tree-sitter generate",
+    "test": "npx tree-sitter test",
+    "example": "npx tree-sitter parse example.gc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/open-goal/tree-sitter-opengoal.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/open-goal/tree-sitter-opengoal/issues"
+  },
+  "homepage": "https://github.com/open-goal/tree-sitter-opengoal#readme",
+  "dependencies": {
+    "nan": "^2.17.0"
+  },
+  "devDependencies": {
+    "tree-sitter-cli": "^0.20.8"
+  }
+}
