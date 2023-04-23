@@ -1,0 +1,13 @@
+node_modules/
+Cargo.lock
+.node-version
+build
+*.log
+/test.js
+/examples/npm
+package-lock.json
+/target/
+.build/
+*.lib
+*.obj
+*.exp
