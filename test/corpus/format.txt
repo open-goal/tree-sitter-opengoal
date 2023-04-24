@@ -1,0 +1,37 @@
+================================================================================
+Format - Basic Case
+================================================================================
+
+"~S~D"
+
+---
+
+(source
+  (str_lit
+    (format_specifier
+      (format_directive_type))
+    (format_specifier
+      (format_directive_type))))
+
+================================================================================
+Format - In an Actual Call
+================================================================================
+
+(format 0 "~S~D" string-var int-var)
+
+---
+
+(source
+  (list_lit
+    (sym_lit
+      (sym_name))
+    (num_lit)
+    (str_lit
+      (format_specifier
+        (format_directive_type))
+      (format_specifier
+        (format_directive_type)))
+    (sym_lit
+      (sym_name))
+    (sym_lit
+      (sym_name))))

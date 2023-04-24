@@ -1,5 +1,5 @@
 // Heavily stripped down - https://github.com/sogaiu/tree-sitter-clojure/
-// TODO - incorporate some CL ideas from https://github.com/theHamsta/tree-sitter-commonlisp/blob/master/grammar.js
+// With some features taken from https://github.com/theHamsta/tree-sitter-commonlisp/blob/master/grammar.js
 
 // java.lang.Character.isWhitespace
 //
@@ -37,12 +37,6 @@ const WHITESPACE =
 // TODO - ugh support block comments
 const COMMENT =
   token(/(;).*\n?/);
-
-const COMMENT_MULTILINE_START =
-  token('#|');
-
-const COMMENT_MULTILINE_END =
-  token('|#');
 
 const DIGIT =
   /[0-9]/;
@@ -166,7 +160,7 @@ module.exports = grammar({
     _gap: $ =>
       choice($._ws,
         $.comment,
-        $.comment_multiline),
+        $.block_comment),
 
     _ws: $ =>
       WHITESPACE,
@@ -174,18 +168,7 @@ module.exports = grammar({
     comment: $ =>
       COMMENT,
 
-    // ChatGPT generated -- beware!
-    comment_multiline: $ =>
-      seq(
-        COMMENT_MULTILINE_START,
-        repeat(choice(
-          /[^|#]+/,
-          /#[^|]/,
-          /[^#]\|/,
-          /[\n\r]+/
-        )),
-        COMMENT_MULTILINE_END
-      ),
+    block_comment: _ => token(seq('#|', repeat(choice(/[^|]/, /\|[^#]/)), '|#')),
 
     _form: $ =>
       choice($.num_lit, // atom-ish
@@ -216,8 +199,52 @@ module.exports = grammar({
     _kwd_marker: $ =>
       choice(KEYWORD_MARK),
 
+    // https://opengoal.dev/docs/reference/lib/#format
+    // TODO - a lot of this might be irrelevant or not comprehensive in terms of OpenGOAL's
+    // but to be honest, most of these rare features are never used
+    _format_token: $ => choice(alias(NUMBER, $.num_lit), seq("'", alias(/./, $.char_lit))),
+    format_prefix_parameters: _ => choice('v', 'V', '#'),
+    format_modifiers: $ => seq(repeat(choice($._format_token, ',')), choice('@', '@:', ':', ':@')),
+    format_directive_type: $ => choice(
+      seq(optional(field('repetitions', $._format_token)), choice('~', '%', '&', '|')),
+      /[cC]/,
+      /\^/,
+      '\n',
+      '\r',
+      /[pP]/,
+      /[iI]/,
+      /[wW]/,
+      /[aA]/,
+      '_',
+      /[()]/,
+      /[{}]/,
+      /[\[\]]/,
+      /[<>]/,
+      ';',
+      seq(field('numberOfArgs', $._format_token), '*'),
+      '?',
+      "Newline",
+      seq(repeat(choice($._format_token, ',')), /[$rRbBdDgGxXeEoOsStTfF]/),
+    ),
+    format_specifier: $ =>
+      prec.left(seq(
+        '~',
+        optional($.format_prefix_parameters),
+        optional($.format_modifiers),
+        prec(5, $.format_directive_type),
+      )),
+
     str_lit: $ =>
-      STRING,
+      seq(
+        '"',
+        repeat(choice(
+          token.immediate(prec(1, /[^\\~"]+/)),
+          token.immediate(seq(/\\./)),
+          $.format_specifier,
+        )),
+        optional('~'),
+        '"',
+      ),
 
     char_lit: $ =>
       CHARACTER,
@@ -263,5 +290,25 @@ module.exports = grammar({
       seq(field('marker', ","),
         repeat($._gap),
         field('value', $._form)),
+
+    // TODO - consider having ones for defun, defmethod, defstate, etc
+    // defun_keyword: _ => prec(10, clSymbol(choice('defun', 'defmacro', 'defgeneric', 'defmethod'))),
+
+    // defun_header: $ =>
+    //   prec(PREC.SPECIAL, choice(
+    //     seq(field('keyword', $.defun_keyword),
+    //       repeat($._gap),
+    //       choice($.unquoting_lit, $.unquote_splicing_lit)
+    //     ),
+    //     seq(field('keyword', $.defun_keyword),
+    //       repeat($._gap),
+    //       field('function_name', $._form),
+    //       optional(field('specifier', seq(repeat($._gap), choice($.kwd_lit, $.sym_lit)))),
+    //       repeat($._gap),
+    //       field('lambda_list', choice($.list_lit, $.unquoting_lit))),
+    //     seq(field('keyword', alias('lambda', $.defun_keyword)),
+    //       repeat($._gap),
+    //       field('lambda_list', choice($.list_lit, $.unquoting_lit)))
+    //   )),
   }
 });
