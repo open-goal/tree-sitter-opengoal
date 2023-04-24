@@ -48,4 +48,4 @@ jobs:
           yarn gen
 
       - name: Comapre Directories
-        run: diff -r ./src ./src.current
+        run: diff -qrb ./src ./src.current
