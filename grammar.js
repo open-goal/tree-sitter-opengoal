@@ -34,9 +34,8 @@ const WHITESPACE_CHAR =
 const WHITESPACE =
   token(repeat1(WHITESPACE_CHAR));
 
-// TODO - ugh support block comments
 const COMMENT =
-  token(/(;).*\n?/);
+  token(/(;)[^\n]*/);
 
 const DIGIT =
   /[0-9]/;
