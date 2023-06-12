@@ -167,7 +167,9 @@ module.exports = grammar({
     comment: $ =>
       COMMENT,
 
-    block_comment: _ => token(seq('#|', repeat(choice(/[^|]/, /\|[^#]/)), '|#')),
+    block_comment_content: $ => repeat1(/[^#|]/),
+
+    block_comment: $ => seq('#|', $.block_comment_content, '|#'),
 
     _form: $ =>
       choice($.num_lit, // atom-ish
