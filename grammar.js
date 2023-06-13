@@ -34,9 +34,8 @@ const WHITESPACE_CHAR =
 const WHITESPACE =
   token(repeat1(WHITESPACE_CHAR));
 
-// TODO - ugh support block comments
 const COMMENT =
-  token(/(;).*\n?/);
+  token(/(;)[^\n]*/);
 
 const DIGIT =
   /[0-9]/;
@@ -168,7 +167,9 @@ module.exports = grammar({
     comment: $ =>
       COMMENT,
 
-    block_comment: _ => token(seq('#|', repeat(choice(/[^|]/, /\|[^#]/)), '|#')),
+    block_comment_content: $ => repeat1(/[^#|]/),
+
+    block_comment: $ => seq('#|', $.block_comment_content, '|#'),
 
     _form: $ =>
       choice($.num_lit, // atom-ish

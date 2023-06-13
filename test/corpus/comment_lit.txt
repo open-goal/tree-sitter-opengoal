@@ -46,7 +46,8 @@ that spans multiple lines
 --------------------------------------------------------------------------------
 
 (source
-  (block_comment)
+  (block_comment
+    (block_comment_content))
   (comment))
 
 ================================================================================
@@ -60,7 +61,8 @@ that spans multiple lines
 --------------------------------------------------------------------------------
 
 (source
-  (block_comment))
+  (block_comment
+    (block_comment_content)))
 
 ================================================================================
 Multi-line Block Comment Content also on Second Line
@@ -72,4 +74,5 @@ that spans multiple lines|#
 --------------------------------------------------------------------------------
 
 (source
-  (block_comment))
+  (block_comment
+    (block_comment_content)))

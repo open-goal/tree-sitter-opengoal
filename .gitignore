@@ -12,3 +12,4 @@ package-lock.json
 *.obj
 *.exp
 src.current/
+.yarn/
