@@ -13,4 +13,3 @@ package-lock.json
 *.exp
 src.current/
 .yarn/
-.yarnrc.yml
