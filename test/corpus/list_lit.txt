@@ -19,6 +19,6 @@ List with Keywords
 
 (source
   (list_lit
-    (kwd_lit (kwd_name))
-    (kwd_lit (kwd_name))
-    (kwd_lit (kwd_name))))
+    (kwd_lit)
+    (kwd_lit)
+    (kwd_lit)))

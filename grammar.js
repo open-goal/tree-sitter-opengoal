@@ -37,6 +37,9 @@ const WHITESPACE =
 const COMMENT =
   token(/(;)[^\n]*/);
 
+const BLOCK_COMMENT =
+  token(seq('#|', repeat1(/[^#|]/), '|#'));
+
 const DIGIT =
   /[0-9]/;
 
@@ -84,20 +87,7 @@ const KEYWORD_HEAD =
 const KEYWORD_BODY =
   choice(/[:']/, KEYWORD_HEAD);
 
-const KEYWORD_NO_SIGIL =
-  token(seq(KEYWORD_HEAD,
-    repeat(KEYWORD_BODY)));
-
-const KEYWORD_MARK =
-  token(":");
-
-const STRING =
-  token(seq('"',
-    repeat(/[^"\\]/),
-    repeat(seq("\\",
-      /./,
-      repeat(/[^"\\]/))),
-    '"'));
+const KEYWORD = token(seq(":", KEYWORD_HEAD, repeat(KEYWORD_BODY)))
 
 const ANY_CHAR =
   /.|\n/;
@@ -167,9 +157,7 @@ module.exports = grammar({
     comment: $ =>
       COMMENT,
 
-    block_comment_content: $ => repeat1(/[^#|]/),
-
-    block_comment: $ => seq('#|', $.block_comment_content, '|#'),
+    block_comment: $ => BLOCK_COMMENT,
 
     _form: $ =>
       choice($.num_lit, // atom-ish
@@ -190,15 +178,7 @@ module.exports = grammar({
     num_lit: $ =>
       NUMBER,
 
-    kwd_lit: $ =>
-      choice($._kwd_unqualified),
-
-    _kwd_unqualified: $ =>
-      prec(1, seq(field('marker', $._kwd_marker),
-        field('name', alias(KEYWORD_NO_SIGIL, $.kwd_name)))),
-
-    _kwd_marker: $ =>
-      choice(KEYWORD_MARK),
+    kwd_lit: $ => KEYWORD,
 
     // https://opengoal.dev/docs/reference/lib/#format
     // TODO - a lot of this might be irrelevant or not comprehensive in terms of OpenGOAL's
