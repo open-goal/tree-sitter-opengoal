@@ -26,9 +26,10 @@ jobs:
 
       - name: Install Dependencies and Run Tests
         run: |
-          yarn set version stable
+          yarn set version berry
           yarn install --immutable
           yarn test
+
   generate:
     name: Ensure Generated
     runs-on: ubuntu-latest
@@ -44,7 +45,7 @@ jobs:
 
       - name: Install Dependencies and Generate
         run: |
-          yarn set version stable
+          yarn set version berry
           yarn install --immutable
           cp -r ./src ./src.current
           yarn gen
