@@ -4,9 +4,10 @@
   "description": "A tree sitter parser for the OpenGOAL language",
   "main": "bindings/node",
   "scripts": {
-    "gen": "npx tree-sitter generate",
-    "test": "npx tree-sitter test",
-    "parse-sample": "npx tree-sitter parse test/samples/sample.gc"
+    "gen": "yarn tree-sitter generate",
+    "test": "yarn tree-sitter test",
+    "parse-sample": "yarn tree-sitter parse test/samples/sample.gc",
+    "parse-test": "yarn tree-sitter parse test/samples/test.gc"
   },
   "repository": {
     "type": "git",
@@ -19,7 +20,7 @@
   },
   "homepage": "https://github.com/open-goal/tree-sitter-opengoal#readme",
   "dependencies": {
-    "nan": "^2.17.0"
+    "nan": "^2.18.0"
   },
   "devDependencies": {
     "tree-sitter-cli": "^0.20.8"
