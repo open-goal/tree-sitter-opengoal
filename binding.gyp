@@ -1,7 +1,7 @@
 {
   "targets": [
     {
-      "target_name": "tree_sitter_OpenGOAL_binding",
+      "target_name": "tree_sitter_opengoal_binding",
       "include_dirs": [
         "<!(node -e \"require('nan')\")",
         "src"
