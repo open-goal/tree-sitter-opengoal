@@ -6,7 +6,8 @@
   "scripts": {
     "gen": "npx tree-sitter generate",
     "test": "npx tree-sitter test",
-    "parse-sample": "npx tree-sitter parse test/samples/sample.gc"
+    "parse-sample": "npx tree-sitter parse test/samples/sample.gc",
+    "parse-test": "npx tree-sitter parse test/samples/test.gc"
   },
   "repository": {
     "type": "git",

@@ -61,10 +61,10 @@
             "value": "#|"
           },
           {
-            "type": "REPEAT1",
+            "type": "REPEAT",
             "content": {
               "type": "PATTERN",
-              "value": "[^#|]"
+              "value": "[^|]"
             }
           },
           {

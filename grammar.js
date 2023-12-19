@@ -38,7 +38,7 @@ const COMMENT =
   token(/(;)[^\n]*/);
 
 const BLOCK_COMMENT =
-  token(seq('#|', repeat1(/[^#|]/), '|#'));
+  token(seq('#|', repeat(/[^|]/), '|#'));
 
 const DIGIT =
   /[0-9]/;
