@@ -4,7 +4,7 @@ Format - Basic Case
 
 "~S~D"
 
----
+--------------------------------------------------------------------------------
 
 (source
   (str_lit
@@ -19,7 +19,7 @@ Format - In an Actual Call
 
 (format 0 "~S~D" string-var int-var)
 
----
+--------------------------------------------------------------------------------
 
 (source
   (list_lit
@@ -35,3 +35,85 @@ Format - In an Actual Call
       (sym_name))
     (sym_lit
       (sym_name))))
+
+================================================================================
+https://github.com/open-goal/tree-sitter-opengoal/issues/11
+================================================================================
+
+(format #t "~1Tfog-start: (meters ~m)~%" (-> this fog-dists x))
+(format #t "~1Tfog-end: (meters ~m)~%" (-> this fog-dists y))
+
+--------------------------------------------------------------------------------
+
+(source
+  (list_lit
+    (sym_lit
+      (sym_name))
+    (bool_lit)
+    (str_lit
+      (format_specifier
+        (format_directive_type
+          (num_lit)))
+      (format_specifier
+        (format_directive_type))
+      (format_specifier
+        (format_directive_type)))
+    (list_lit
+      (sym_lit
+        (sym_name))
+      (sym_lit
+        (sym_name))
+      (sym_lit
+        (sym_name))
+      (sym_lit
+        (sym_name))))
+  (list_lit
+    (sym_lit
+      (sym_name))
+    (bool_lit)
+    (str_lit
+      (format_specifier
+        (format_directive_type
+          (num_lit)))
+      (format_specifier
+        (format_directive_type))
+      (format_specifier
+        (format_directive_type)))
+    (list_lit
+      (sym_lit
+        (sym_name))
+      (sym_lit
+        (sym_name))
+      (sym_lit
+        (sym_name))
+      (sym_lit
+        (sym_name)))))
+
+================================================================================
+https://github.com/open-goal/tree-sitter-opengoal/issues/10
+================================================================================
+
+(format #t "~1Tambient: ~`vector`P~%" (-> this ambient))
+
+--------------------------------------------------------------------------------
+
+(source
+  (list_lit
+    (sym_lit
+      (sym_name))
+    (bool_lit)
+    (str_lit
+      (format_specifier
+        (format_directive_type
+          (num_lit)))
+      (format_specifier
+        (format_directive_type))
+      (format_specifier
+        (format_directive_type)))
+    (list_lit
+      (sym_lit
+        (sym_name))
+      (sym_lit
+        (sym_name))
+      (sym_lit
+        (sym_name)))))

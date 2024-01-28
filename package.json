@@ -6,8 +6,8 @@
   "scripts": {
     "gen": "yarn tree-sitter generate",
     "test": "yarn tree-sitter test",
-    "parse-sample": "yarn tree-sitter parse test/samples/sample.gc",
-    "parse-test": "yarn tree-sitter parse test/samples/test.gc"
+    "parse-sample": "yarn gen && yarn tree-sitter parse test/samples/sample.gc",
+    "parse-test": "yarn gen && yarn tree-sitter parse test/samples/test.gc"
   },
   "repository": {
     "type": "git",

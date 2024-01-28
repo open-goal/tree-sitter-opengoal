@@ -1,4 +1,2 @@
-#|
-a block comment
-with #
-|#
+(format #t "~1Tfog-start: (meters ~m)~%" (-> this fog-dists x))
+(format #t "~1Tfog-end: (meters ~m)~%" (-> this fog-dists y))
