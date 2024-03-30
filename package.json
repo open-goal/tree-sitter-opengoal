@@ -3,11 +3,14 @@
   "version": "1.0.0",
   "description": "A tree sitter parser for the OpenGOAL language",
   "main": "bindings/node",
+  "types": "bindings/node",
   "scripts": {
     "gen": "yarn tree-sitter generate",
     "test": "yarn tree-sitter test",
     "parse-sample": "yarn gen && yarn tree-sitter parse test/samples/sample.gc",
-    "parse-test": "yarn gen && yarn tree-sitter parse test/samples/test.gc"
+    "parse-test": "yarn gen && yarn tree-sitter parse test/samples/test.gc",
+    "install": "node-gyp-build",
+    "prebuildify": "prebuildify --napi --strip"
   },
   "repository": {
     "type": "git",
@@ -20,9 +23,39 @@
   },
   "homepage": "https://github.com/open-goal/tree-sitter-opengoal#readme",
   "dependencies": {
-    "nan": "^2.18.0"
+    "node-addon-api": "^7.1.0",
+    "node-gyp-build": "^4.8.0"
+  },
+  "peerDependencies": {
+    "tree-sitter": "^0.21.0"
+  },
+  "peerDependenciesMeta": {
+    "tree_sitter": {
+      "optional": true
+    }
   },
   "devDependencies": {
-    "tree-sitter-cli": "^0.20.8"
-  }
+    "prebuildify": "^6.0.0",
+    "tree-sitter-cli": "^0.22.1"
+  },
+  "files": [
+    "grammar.js",
+    "binding.gyp",
+    "prebuilds/**",
+    "bindings/node/*",
+    "queries/*",
+    "src/**"
+  ],
+  "tree-sitter": [
+    {
+      "scope": "source.opengoal",
+      "file-types": [
+        "gc",
+        "gs",
+        "gd",
+        "gp"
+      ]
+    }
+  ],
+  "packageManager": "yarn@1.22.22"
 }
