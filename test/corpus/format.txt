@@ -117,3 +117,25 @@ https://github.com/open-goal/tree-sitter-opengoal/issues/10
         (sym_name))
       (sym_lit
         (sym_name)))))
+
+================================================================================
+Width specification
+================================================================================
+
+(format #t "~12A~%" name)
+
+--------------------------------------------------------------------------------
+
+(source
+  (list_lit
+    (sym_lit
+      (sym_name))
+    (bool_lit)
+    (str_lit
+      (format_specifier
+        (format_directive_type
+          (num_lit)))
+      (format_specifier
+        (format_directive_type)))
+    (sym_lit
+        (sym_name))))
