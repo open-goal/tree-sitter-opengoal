@@ -5,7 +5,6 @@ build
 *.log
 /test.js
 /examples/npm
-package-lock.json
 /target/
 .build/
 *.lib
