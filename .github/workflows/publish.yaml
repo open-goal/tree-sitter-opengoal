@@ -7,5 +7,8 @@ on:
 jobs:
   npm:
     uses: tree-sitter/workflows/.github/workflows/package-npm.yml@main
+    # Related - https://github.com/tree-sitter/workflows/issues/9
+    with:
+      node-version: v20.11.1
     secrets:
       NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
