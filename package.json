@@ -1,11 +1,12 @@
 {
   "name": "tree-sitter-opengoal",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A tree sitter parser for the OpenGOAL language",
   "main": "bindings/node",
   "types": "bindings/node",
   "scripts": {
     "gen": "yarn tree-sitter generate",
+    "wasm": "yarn tree-sitter build --wasm",
     "test": "yarn tree-sitter generate && yarn tree-sitter test",
     "parse-sample": "yarn gen && yarn tree-sitter parse test/samples/sample.gc",
     "parse-test": "yarn gen && yarn tree-sitter parse test/samples/test.gc",
@@ -27,7 +28,7 @@
     "node-gyp-build": "^4.8.0"
   },
   "peerDependencies": {
-    "tree-sitter": "^0.21.0"
+    "tree-sitter": "^0.21.1"
   },
   "peerDependenciesMeta": {
     "tree_sitter": {
@@ -36,7 +37,7 @@
   },
   "devDependencies": {
     "prebuildify": "^6.0.0",
-    "tree-sitter-cli": "^0.22.1"
+    "tree-sitter-cli": "^0.22.6"
   },
   "files": [
     "grammar.js",
