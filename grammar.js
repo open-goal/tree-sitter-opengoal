@@ -31,70 +31,48 @@
 const WHITESPACE_CHAR =
   /[\f\n\r\t \u000B\u001C\u001D\u001E\u001F\u2028\u2029\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2008\u2009\u200a\u205f\u3000]/;
 
-const WHITESPACE =
-  token(repeat1(WHITESPACE_CHAR));
+const WHITESPACE = token(repeat1(WHITESPACE_CHAR));
 
-const COMMENT =
-  token(/(;)[^\n]*/);
+const COMMENT = token(/(;)[^\n]*/);
 
-const BLOCK_COMMENT =
-  token(seq('#|', repeat(choice(/[^|#]/, seq('#', /[^|]/), seq('|', /[^#]/))), '|#'));
+const BLOCK_COMMENT = token(
+  seq("#|", repeat(choice(/[^|#]/, seq("#", /[^|]/), seq("|", /[^#]/))), "|#"),
+);
 
-const DIGIT =
-  /[0-9]/;
+const DIGIT = /[0-9]/;
 
-const HEX_DIGIT =
-  /[0-9a-fA-F]/;
+const HEX_DIGIT = /[0-9a-fA-F]/;
 
-const BINARY_DIGIT =
-  /[0-1]/;
+const BINARY_DIGIT = /[0-1]/;
 
-const HEX_NUMBER =
-  seq("#x",
-    repeat1(HEX_DIGIT));
+const HEX_NUMBER = seq("#x", repeat1(HEX_DIGIT));
 
-const BINARY_NUMBER =
-  seq("#b",
-    repeat1(BINARY_DIGIT));
+const BINARY_NUMBER = seq("#b", repeat1(BINARY_DIGIT));
 
-const FLOAT =
-  seq(repeat1(DIGIT),
-    optional(seq(".",
-      repeat(DIGIT))));
+const FLOAT = seq(repeat1(DIGIT), optional(seq(".", repeat(DIGIT))));
 
-const INTEGER =
-  seq(repeat1(DIGIT));
+const INTEGER = seq(repeat1(DIGIT));
 
 // TODO - does OG support negative hex/binary?
-const NUMBER =
-  token(seq(optional(/[+-]/),
-    choice(HEX_NUMBER,
-      BINARY_NUMBER,
-      FLOAT,
-      INTEGER)));
+const NUMBER = token(
+  seq(optional(/[+-]/), choice(HEX_NUMBER, BINARY_NUMBER, FLOAT, INTEGER)),
+);
 
-const NULL =
-  token('none');
+const NULL = token("none");
 
 // While technically anything other than #f is true, conventionally speaking #t is used to indicate true
-const BOOLEAN =
-  token(choice('#f',
-    '#t'));
+const BOOLEAN = token(choice("#f", "#t"));
 
 const KEYWORD_HEAD =
   /[^\f\n\r\t ()\[\]{}"@~^;`\\,:/\u000B\u001C\u001D\u001E\u001F\u2028\u2029\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2008\u2009\u200a\u205f\u3000]/;
 
-const KEYWORD_BODY =
-  choice(/[:']/, KEYWORD_HEAD);
+const KEYWORD_BODY = choice(/[:']/, KEYWORD_HEAD);
 
-const KEYWORD = token(seq(":", KEYWORD_HEAD, repeat(KEYWORD_BODY)))
+const KEYWORD = token(seq(":", KEYWORD_HEAD, repeat(KEYWORD_BODY)));
 
-const ANY_CHAR =
-  /.|\n/;
+const ANY_CHAR = /.|\n/;
 
-const CHARACTER =
-  token(seq("#\\",
-    choice(ANY_CHAR, "\\s", "\\n", "\\t")));
+const CHARACTER = token(seq("#\\", choice(ANY_CHAR, "\\s", "\\n", "\\t")));
 
 // \u000B => <vertical tab>
 // \u001C => <file separator>
@@ -119,50 +97,41 @@ const CHARACTER =
 const SYMBOL_HEAD =
   /[^\f\n\r\t ()\[\]{}"@~^;`\\,:'0-9\u000B\u001C\u001D\u001E\u001F\u2028\u2029\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2008\u2009\u200a\u205f\u3000]/;
 
-const SYMBOL_BODY =
-  choice(SYMBOL_HEAD,
-    /[:#~'0-9\/]/);
+const SYMBOL_BODY = choice(SYMBOL_HEAD, /[:#~'0-9\/]/);
 
-const SYMBOL =
-  token(seq(SYMBOL_HEAD,
-    repeat(SYMBOL_BODY)));
+const SYMBOL = token(seq(SYMBOL_HEAD, repeat(SYMBOL_BODY)));
 
 // Define a rule specifically for symbols starting with digits followed by non-digit characters
-const DIGIT_SYMBOL = token(seq(repeat1(DIGIT), SYMBOL_BODY, repeat(SYMBOL_BODY)));
+const DIGIT_SYMBOL = token(
+  seq(repeat1(DIGIT), SYMBOL_BODY, repeat(SYMBOL_BODY)),
+);
+
+const DEFUN_LIKE = choice("defun", "defmacro");
 
 module.exports = grammar({
-  name: 'opengoal',
+  name: "opengoal",
 
-  extras: $ =>
-    [],
+  extras: ($) => [],
 
-  conflicts: $ =>
-    [],
+  conflicts: ($) => [],
 
-  inline: $ =>
-    [$._sym_unqualified],
+  inline: ($) => [$._sym_unqualified],
 
   rules: {
     // THIS MUST BE FIRST -- even though this doesn't look like it matters
-    source: $ =>
-      repeat(choice($._form,
-        $._gap)),
+    source: ($) => repeat(choice($._form, $._gap)),
 
-    _gap: $ =>
-      choice($._ws,
-        $.comment,
-        $.block_comment),
+    _gap: ($) => choice($._ws, $.comment, $.block_comment),
 
-    _ws: $ =>
-      WHITESPACE,
+    _ws: ($) => WHITESPACE,
 
-    comment: $ =>
-      COMMENT,
+    comment: ($) => COMMENT,
 
-    block_comment: $ => BLOCK_COMMENT,
+    block_comment: ($) => BLOCK_COMMENT,
 
-    _form: $ =>
-      choice($.num_lit, // atom-ish
+    _form: ($) =>
+      choice(
+        $.num_lit, // atom-ish
         $.kwd_lit,
         $.str_lit,
         $.char_lit,
@@ -175,126 +144,158 @@ module.exports = grammar({
         $.quoting_lit,
         $.quasi_quoting_lit,
         $.unquote_splicing_lit,
-        $.unquoting_lit),
+        $.unquoting_lit,
+      ),
 
-    num_lit: $ =>
-      NUMBER,
+    num_lit: ($) => NUMBER,
 
-    kwd_lit: $ => KEYWORD,
+    kwd_lit: ($) => KEYWORD,
 
     // https://opengoal.dev/docs/reference/lib/#format
     // TODO - a lot of this might be irrelevant or not comprehensive in terms of OpenGOAL's
     // but to be honest, most of these rare features are never used
-    _format_token: $ => choice(alias(NUMBER, $.num_lit), seq("'", alias(/./, $.char_lit))),
-    format_prefix_parameters: _ => choice('v', 'V', '#'),
-    format_modifiers: $ => seq(repeat(choice($._format_token, ',')), choice('@', '@:', ':', ':@')),
-    format_directive_type: $ => choice(
-      seq(optional(field('repetitions', $._format_token)), choice('~', '%', '&', '|')),
-      /[cC]/,
-      /\^/,
-      '\n',
-      '\r',
-      /[pP]/,
-      /[iI]/,
-      /[wW]/,
-      /[aA]/,
-      '_',
-      /[()]/,
-      /[{}]/,
-      /[\[\]]/,
-      /[<>]/,
-      ';',
-      '`',
-      seq(field('numberOfArgs', $._format_token), '*'),
-      '?',
-      "Newline",
-      seq(repeat(choice($._format_token, ',')), /[$AmMrRbBdDgGxXeEoOsStTfFHhJjKkLlNnVwWyYzZ]/),
-    ),
-    format_specifier: $ =>
-      prec.left(seq(
-        '~',
-        optional($.format_prefix_parameters),
-        optional($.format_modifiers),
-        prec(5, $.format_directive_type),
-      )),
+    _format_token: ($) =>
+      choice(alias(NUMBER, $.num_lit), seq("'", alias(/./, $.char_lit))),
+    format_prefix_parameters: (_) => choice("v", "V", "#"),
+    format_modifiers: ($) =>
+      seq(repeat(choice($._format_token, ",")), choice("@", "@:", ":", ":@")),
+    format_directive_type: ($) =>
+      choice(
+        seq(
+          optional(field("repetitions", $._format_token)),
+          choice("~", "%", "&", "|"),
+        ),
+        /[cC]/,
+        /\^/,
+        "\n",
+        "\r",
+        /[pP]/,
+        /[iI]/,
+        /[wW]/,
+        /[aA]/,
+        "_",
+        /[()]/,
+        /[{}]/,
+        /[\[\]]/,
+        /[<>]/,
+        ";",
+        "`",
+        seq(field("numberOfArgs", $._format_token), "*"),
+        "?",
+        "Newline",
+        seq(
+          repeat(choice($._format_token, ",")),
+          /[$AmMrRbBdDgGxXeEoOsStTfFHhJjKkLlNnVwWyYzZ]/,
+        ),
+      ),
+    format_specifier: ($) =>
+      prec.left(
+        seq(
+          "~",
+          optional($.format_prefix_parameters),
+          optional($.format_modifiers),
+          prec(5, $.format_directive_type),
+        ),
+      ),
 
-    str_lit: $ =>
+    str_lit: ($) =>
       seq(
         '"',
-        repeat(choice(
-          token.immediate(prec(1, /[^\\~"]+/)),
-          token.immediate(seq(/\\./)),
-          $.format_specifier,
-        )),
-        optional('~'),
+        repeat(
+          choice(
+            token.immediate(prec(1, /[^\\~"]+/)),
+            token.immediate(seq(/\\./)),
+            $.format_specifier,
+          ),
+        ),
+        optional("~"),
         '"',
       ),
 
-    char_lit: $ =>
-      CHARACTER,
+    char_lit: ($) => CHARACTER,
 
-    null_lit: $ =>
-      NULL,
+    null_lit: ($) => NULL,
 
-    bool_lit: $ =>
-      BOOLEAN,
+    bool_lit: ($) => BOOLEAN,
 
-    sym_lit: $ =>
-      seq(choice($._sym_unqualified, $._digit_sym)),
+    sym_lit: ($) => seq(choice($._sym_unqualified, $._digit_sym)),
 
-    _digit_sym: $ => field('name', alias(DIGIT_SYMBOL, $.sym_name)),
+    _digit_sym: ($) => field("name", alias(DIGIT_SYMBOL, $.sym_name)),
 
-    _sym_unqualified: $ =>
-      field('name', alias(choice("/", SYMBOL),
-        $.sym_name)),
+    _sym_unqualified: ($) =>
+      field("name", alias(choice("/", SYMBOL), $.sym_name)),
 
-    list_lit: $ =>
-      seq($._bare_list_lit),
+    list_lit: ($) => choice($.defun_expr, $.call_expr, $._bare_list_lit),
 
-    _bare_list_lit: $ =>
-      seq(field('open', "("),
-        repeat(choice(field('value', $._form),
-          $._gap)),
-        field('close', ")")),
+    _bare_list_lit: ($) =>
+      seq(
+        field("open", "("),
+        repeat(choice(field("value", $._form), $._gap)),
+        field("close", ")"),
+      ),
 
-    quoting_lit: $ =>
-      seq(field('marker', "'"),
+    param_list: ($) =>
+      seq(
+        field("open", "("),
+        repeat(choice(field("param", $.sym_lit), $._gap)),
+        field("close", ")"),
+      ),
+
+    defun_expr: ($) =>
+      seq(
+        field("open", "("),
+        field("keyword", alias(DEFUN_LIKE, $.sym_name)),
         repeat($._gap),
-        field('value', $._form)),
-
-    quasi_quoting_lit: $ =>
-      seq(field('marker', "`"),
+        field("name", $.sym_lit),
         repeat($._gap),
-        field('value', $._form)),
+        field("params", $.param_list),
+        repeat(choice(field("body", $._form), $._gap)),
+        field("close", ")"),
+      ),
 
-    unquote_splicing_lit: $ =>
-      seq(field('marker', ",@"),
+    call_expr: ($) =>
+      prec(
+        1,
+        seq(
+          field("open", "("),
+          field("callee", $.sym_lit),
+          repeat(choice(field("arg", $._form), $._gap)),
+          field("close", ")"),
+        ),
+      ),
+
+    _non_call_form_inner: ($) =>
+      choice(
+        $.num_lit,
+        $.kwd_lit,
+        $.str_lit,
+        $.char_lit,
+        $.null_lit,
+        $.bool_lit,
+        $.sym_lit,
+        $.quoting_lit,
+        $.quasi_quoting_lit,
+        $.unquote_splicing_lit,
+        $.unquoting_lit,
+        alias($._bare_list_lit, $.list_lit),
+      ),
+
+    quoting_lit: ($) =>
+      seq(
+        field("marker", "'"),
         repeat($._gap),
-        field('value', $._form)),
+        field("value", $._non_call_form_inner),
+      ),
 
-    unquoting_lit: $ =>
-      seq(field('marker', ","),
-        repeat($._gap),
-        field('value', $._form)),
+    quasi_quoting_lit: ($) =>
+      seq(field("marker", "`"), repeat($._gap), field("value", $._form)),
 
-    // TODO - consider having ones for defun, defmethod, defstate, etc
-    // defun_keyword: _ => prec(10, clSymbol(choice('defun', 'defmacro', 'defgeneric', 'defmethod'))),
+    unquote_splicing_lit: ($) =>
+      seq(field("marker", ",@"), repeat($._gap), field("value", $._form)),
 
-    // defun_header: $ =>
-    //   prec(PREC.SPECIAL, choice(
-    //     seq(field('keyword', $.defun_keyword),
-    //       repeat($._gap),
-    //       choice($.unquoting_lit, $.unquote_splicing_lit)
-    //     ),
-    //     seq(field('keyword', $.defun_keyword),
-    //       repeat($._gap),
-    //       field('function_name', $._form),
-    //       optional(field('specifier', seq(repeat($._gap), choice($.kwd_lit, $.sym_lit)))),
-    //       repeat($._gap),
-    //       field('lambda_list', choice($.list_lit, $.unquoting_lit))),
-    //     seq(field('keyword', alias('lambda', $.defun_keyword)),
-    //       repeat($._gap),
-    //       field('lambda_list', choice($.list_lit, $.unquoting_lit)))
-    //   )),
-  }
+    unquoting_lit: ($) =>
+      seq(field("marker", ","), repeat($._gap), field("value", $._form)),
+  },
 });
+
+// hell

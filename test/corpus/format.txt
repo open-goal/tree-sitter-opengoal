@@ -23,18 +23,19 @@ Format - In an Actual Call
 
 (source
   (list_lit
-    (sym_lit
-      (sym_name))
-    (num_lit)
-    (str_lit
-      (format_specifier
-        (format_directive_type))
-      (format_specifier
-        (format_directive_type)))
-    (sym_lit
-      (sym_name))
-    (sym_lit
-      (sym_name))))
+    (call_expr
+      (sym_lit
+        (sym_name))
+      (num_lit)
+      (str_lit
+        (format_specifier
+          (format_directive_type))
+        (format_specifier
+          (format_directive_type)))
+      (sym_lit
+        (sym_name))
+      (sym_lit
+        (sym_name)))))
 
 ================================================================================
 https://github.com/open-goal/tree-sitter-opengoal/issues/11
@@ -47,47 +48,51 @@ https://github.com/open-goal/tree-sitter-opengoal/issues/11
 
 (source
   (list_lit
-    (sym_lit
-      (sym_name))
-    (bool_lit)
-    (str_lit
-      (format_specifier
-        (format_directive_type
-          (num_lit)))
-      (format_specifier
-        (format_directive_type))
-      (format_specifier
-        (format_directive_type)))
-    (list_lit
+    (call_expr
       (sym_lit
         (sym_name))
-      (sym_lit
-        (sym_name))
-      (sym_lit
-        (sym_name))
-      (sym_lit
-        (sym_name))))
+      (bool_lit)
+      (str_lit
+        (format_specifier
+          (format_directive_type
+            (num_lit)))
+        (format_specifier
+          (format_directive_type))
+        (format_specifier
+          (format_directive_type)))
+      (list_lit
+        (call_expr
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name))))))
   (list_lit
-    (sym_lit
-      (sym_name))
-    (bool_lit)
-    (str_lit
-      (format_specifier
-        (format_directive_type
-          (num_lit)))
-      (format_specifier
-        (format_directive_type))
-      (format_specifier
-        (format_directive_type)))
-    (list_lit
+    (call_expr
       (sym_lit
         (sym_name))
-      (sym_lit
-        (sym_name))
-      (sym_lit
-        (sym_name))
-      (sym_lit
-        (sym_name)))))
+      (bool_lit)
+      (str_lit
+        (format_specifier
+          (format_directive_type
+            (num_lit)))
+        (format_specifier
+          (format_directive_type))
+        (format_specifier
+          (format_directive_type)))
+      (list_lit
+        (call_expr
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name)))))))
 
 ================================================================================
 https://github.com/open-goal/tree-sitter-opengoal/issues/10
@@ -99,24 +104,26 @@ https://github.com/open-goal/tree-sitter-opengoal/issues/10
 
 (source
   (list_lit
-    (sym_lit
-      (sym_name))
-    (bool_lit)
-    (str_lit
-      (format_specifier
-        (format_directive_type
-          (num_lit)))
-      (format_specifier
-        (format_directive_type))
-      (format_specifier
-        (format_directive_type)))
-    (list_lit
+    (call_expr
       (sym_lit
         (sym_name))
-      (sym_lit
-        (sym_name))
-      (sym_lit
-        (sym_name)))))
+      (bool_lit)
+      (str_lit
+        (format_specifier
+          (format_directive_type
+            (num_lit)))
+        (format_specifier
+          (format_directive_type))
+        (format_specifier
+          (format_directive_type)))
+      (list_lit
+        (call_expr
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name)))))))
 
 ================================================================================
 Width specification
@@ -128,14 +135,15 @@ Width specification
 
 (source
   (list_lit
-    (sym_lit
-      (sym_name))
-    (bool_lit)
-    (str_lit
-      (format_specifier
-        (format_directive_type
-          (num_lit)))
-      (format_specifier
-        (format_directive_type)))
-    (sym_lit
-        (sym_name))))
+    (call_expr
+      (sym_lit
+        (sym_name))
+      (bool_lit)
+      (str_lit
+        (format_specifier
+          (format_directive_type
+            (num_lit)))
+        (format_specifier
+          (format_directive_type)))
+      (sym_lit
+          (sym_name)))))

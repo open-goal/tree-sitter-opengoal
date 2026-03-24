@@ -22,9 +22,11 @@ Unquoting List
 (source
   (quasi_quoting_lit
     (list_lit
-      (sym_lit (sym_name))
-      (unquoting_lit
-        (list_lit
-          (sym_lit (sym_name))
-          (num_lit)
-          (sym_lit (sym_name)))))))
+      (call_expr
+        (sym_lit (sym_name))
+        (unquoting_lit
+          (list_lit
+            (call_expr
+              (sym_lit (sym_name))
+              (num_lit)
+              (sym_lit (sym_name)))))))))

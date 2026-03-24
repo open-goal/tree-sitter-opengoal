@@ -1,0 +1,67 @@
+================================================================================
+Functions - Declaration and Calls
+================================================================================
+
+(defmacro md (file &rest path)
+  "Make Debug: make + print disassembly for a file"
+  (if (null? path)
+      `(asm-file ,file :color :write :disassemble)
+      `(asm-file ,file :color :write :disassemble ,(first path))
+      )
+  )
+
+--------------------------------------------------------------------------------
+
+(source
+  (list_lit
+    (defun_expr
+      (sym_name)
+      (sym_lit
+        (sym_name))
+      (param_list
+        (sym_lit
+          (sym_name))
+        (sym_lit
+          (sym_name))
+        (sym_lit
+          (sym_name)))
+      (str_lit)
+      (list_lit
+        (call_expr
+          (sym_lit
+            (sym_name))
+          (list_lit
+            (call_expr
+              (sym_lit
+                (sym_name))
+              (sym_lit
+                (sym_name))))
+          (quasi_quoting_lit
+            (list_lit
+              (call_expr
+                (sym_lit
+                  (sym_name))
+                (unquoting_lit
+                  (sym_lit
+                    (sym_name)))
+                (kwd_lit)
+                (kwd_lit)
+                (kwd_lit))))
+          (quasi_quoting_lit
+            (list_lit
+              (call_expr
+                (sym_lit
+                  (sym_name))
+                (unquoting_lit
+                  (sym_lit
+                    (sym_name)))
+                (kwd_lit)
+                (kwd_lit)
+                (kwd_lit)
+                (unquoting_lit
+                  (list_lit
+                    (call_expr
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))))))))))))))
