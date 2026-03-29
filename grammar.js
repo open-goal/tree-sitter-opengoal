@@ -234,12 +234,19 @@ module.exports = grammar({
         field("close", ")"),
       ),
 
-    param_list: ($) =>
+    param: ($) => choice($.sym_lit, $.kwarg_param),
+
+    kwarg_param: ($) =>
       seq(
-        field("open", "("),
-        repeat(choice(field("param", $.sym_lit), $._gap)),
-        field("close", ")"),
+        "(",
+        field("name", $.sym_lit),
+        optional(seq(repeat($._gap), field("default", $._form))),
+        repeat($._gap),
+        ")",
       ),
+
+    param_list: ($) =>
+      seq("(", repeat(choice(field("param", $.param), $._gap)), ")"),
 
     defun_expr: ($) =>
       seq(
@@ -297,5 +304,3 @@ module.exports = grammar({
       seq(field("marker", ","), repeat($._gap), field("value", $._form)),
   },
 });
-
-// hell
