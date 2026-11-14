@@ -512,6 +512,36 @@ module.exports = grammar({
         ),
       ),
 
+    defconstant_expr: ($) =>
+      prec(
+        2,
+        seq(
+          "(",
+          "defconstant",
+          repeat($._gap),
+          field("name", $.sym_lit),
+          repeat1($._gap),
+          field("value", $._form),
+          repeat($._gap),
+          ")",
+        ),
+      ),
+
+    define_expr: ($) =>
+      prec(
+        2,
+        seq(
+          "(",
+          "define",
+          repeat($._gap),
+          field("name", $.sym_lit),
+          repeat1($._gap),
+          field("value", $._form),
+          repeat($._gap),
+          ")",
+        ),
+      ),
+
     list_lit: ($) =>
       choice(
         $.type_def,
@@ -519,6 +549,8 @@ module.exports = grammar({
         $.defmethod_expr,
         $.defenum_expr,
         $.defstate_expr,
+        $.defconstant_expr,
+        $.define_expr,
         $.behavior_expr,
         $.lambda_expr,
         $.call_expr,
