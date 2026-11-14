@@ -106,9 +106,6 @@ const DIGIT_SYMBOL = token(
   seq(repeat1(DIGIT), SYMBOL_BODY, repeat(SYMBOL_BODY)),
 );
 
-// TODO - defmethod
-// - lambdas
-// actual function test with arg list
 const DEFUN_LIKE = choice("defun", "defmacro", "desfun");
 
 const DEFENUM = choice("defenum");
@@ -459,13 +456,71 @@ module.exports = grammar({
         ),
       ),
 
+    method_param_list: ($) =>
+      seq(
+        "(",
+        field("receiver", $.typed_param),
+        repeat(choice(field("param", $.param), $._gap)),
+        ")",
+      ),
+
+    defmethod_expr: ($) =>
+      prec(
+        2,
+        seq(
+          field("open", "("),
+          field("keyword", "defmethod"),
+          repeat($._gap),
+          field("name", $.sym_lit),
+          repeat($._gap),
+          field("params", $.method_param_list),
+          optional(
+            seq(
+              repeat1($._gap),
+              choice(
+                field("docstring", $.str_lit),
+                field("body", $._form_without_string),
+              ),
+              repeat(choice(field("body", $._form), $._gap)),
+            ),
+          ),
+          repeat($._gap),
+          field("close", ")"),
+        ),
+      ),
+
+    lambda_expr: ($) =>
+      prec(
+        2,
+        seq(
+          field("open", "("),
+          field("keyword", "lambda"),
+          repeat($._gap),
+          field("params", $.param_list),
+          optional(
+            seq(
+              repeat1($._gap),
+              choice(
+                field("docstring", $.str_lit),
+                field("body", $._form_without_string),
+              ),
+              repeat(choice(field("body", $._form), $._gap)),
+            ),
+          ),
+          repeat($._gap),
+          field("close", ")"),
+        ),
+      ),
+
     list_lit: ($) =>
       choice(
         $.type_def,
         $.defun_expr,
+        $.defmethod_expr,
         $.defenum_expr,
         $.defstate_expr,
         $.behavior_expr,
+        $.lambda_expr,
         $.call_expr,
         $._bare_list_lit,
       ),

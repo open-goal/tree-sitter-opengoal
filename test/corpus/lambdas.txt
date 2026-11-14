@@ -1,0 +1,59 @@
+================================================================================
+Lambdas - Basic Example
+================================================================================
+
+(lambda ((arg1 int))
+    (set! (-> *game-info* mode) 'debug)
+    (initialize! *game-info* 'game (the-as game-save #f) (the-as string #f))
+    )
+
+--------------------------------------------------------------------------------
+
+(source
+  (list_lit
+    (lambda_expr
+      (param_list
+        (param
+          (typed_param
+            (sym_lit
+              (sym_name))
+            (sym_lit
+              (sym_name)))))
+      (list_lit
+        (call_expr
+          (sym_lit
+            (sym_name))
+          (list_lit
+            (call_expr
+              (sym_lit
+                (sym_name))
+              (sym_lit
+                (sym_name))
+              (sym_lit
+                (sym_name))))
+          (quoting_lit
+            (sym_lit
+              (sym_name)))))
+      (list_lit
+        (call_expr
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name))
+          (quoting_lit
+            (sym_lit
+              (sym_name)))
+          (list_lit
+            (call_expr
+              (sym_lit
+                (sym_name))
+              (sym_lit
+                (sym_name))
+              (bool_lit)))
+          (list_lit
+            (call_expr
+              (sym_lit
+                (sym_name))
+              (sym_lit
+                (sym_name))
+              (bool_lit))))))))

@@ -1,13 +1,33 @@
 ================================================================================
-Functions - Declaration and Calls
+Functions - Basic Example
 ================================================================================
 
-(defmacro md (file &rest path)
-  "Make Debug: make + print disassembly for a file"
-  (if (null? path)
-      `(asm-file ,file :color :write :disassemble)
-      `(asm-file ,file :color :write :disassemble ,(first path))
+(defun joint-mod-wheel-callback ((arg0 cspace) (arg1 transformq))
+  "docstring!"
+  (let ((s4-0 (the-as joint-mod-wheel (-> arg0 param1))))
+    (let ((v1-1 (-> s4-0 process root))
+          (s1-0 (new-stack-vector0))
+          (s3-0 (new-stack-vector0))
+          (s2-0 (new-stack-vector0))
+          )
+      0.0
+      0.0
+      (vector-z-quaternion! s2-0 (-> v1-1 quat))
+      (vector<-cspace! s1-0 arg0)
+      (vector-! s3-0 s1-0 (-> s4-0 last-position))
+      (set! (-> s4-0 last-position quad) (-> s1-0 quad))
+      (let* ((f0-3 (vector-dot s2-0 s3-0))
+             (f1-0 65536.0)
+             (f2-1 (* 6.28318 (-> s4-0 wheel-radius)))
+             (f0-4 (* f1-0 (/ 1.0 f2-1) f0-3))
+             )
+        (+! (-> s4-0 angle) f0-4)
+        )
       )
+    (quaternion-vector-angle! (-> arg1 quat) (-> *joint-axis-vectors* (-> s4-0 wheel-axis)) (-> s4-0 angle))
+    )
+  (cspace<-parented-transformq-joint! arg0 arg1)
+  (none)
   )
 
 --------------------------------------------------------------------------------
@@ -20,95 +40,259 @@ Functions - Declaration and Calls
         (sym_name))
       (param_list
         (param
-          (sym_lit
-            (sym_name)))
+          (typed_param
+            (sym_lit
+              (sym_name))
+            (sym_lit
+              (sym_name))))
         (param
-          (sym_lit
-            (sym_name)))
-        (param
-          (sym_lit
-            (sym_name))))
+          (typed_param
+            (sym_lit
+              (sym_name))
+            (sym_lit
+              (sym_name)))))
       (str_lit)
       (list_lit
         (call_expr
           (sym_lit
             (sym_name))
           (list_lit
+            (list_lit
+              (call_expr
+                (sym_lit
+                  (sym_name))
+                (list_lit
+                  (call_expr
+                    (sym_lit
+                      (sym_name))
+                    (sym_lit
+                      (sym_name))
+                    (list_lit
+                      (call_expr
+                        (sym_lit
+                          (sym_name))
+                        (sym_lit
+                          (sym_name))
+                        (sym_lit
+                          (sym_name)))))))))
+          (list_lit
             (call_expr
               (sym_lit
                 (sym_name))
-              (sym_lit
-                (sym_name))))
-          (quasi_quoting_lit
-            (list_lit
-              (call_expr
-                (sym_lit
-                  (sym_name))
-                (unquoting_lit
+              (list_lit
+                (list_lit
+                  (call_expr
+                    (sym_lit
+                      (sym_name))
+                    (list_lit
+                      (call_expr
+                        (sym_lit
+                          (sym_name))
+                        (sym_lit
+                          (sym_name))
+                        (sym_lit
+                          (sym_name))
+                        (sym_lit
+                          (sym_name))))))
+                (list_lit
+                  (call_expr
+                    (sym_lit
+                      (sym_name))
+                    (list_lit
+                      (call_expr
+                        (sym_lit
+                          (sym_name))))))
+                (list_lit
+                  (call_expr
+                    (sym_lit
+                      (sym_name))
+                    (list_lit
+                      (call_expr
+                        (sym_lit
+                          (sym_name))))))
+                (list_lit
+                  (call_expr
+                    (sym_lit
+                      (sym_name))
+                    (list_lit
+                      (call_expr
+                        (sym_lit
+                          (sym_name)))))))
+              (num_lit)
+              (num_lit)
+              (list_lit
+                (call_expr
                   (sym_lit
-                    (sym_name)))
-                (kwd_lit)
-                (kwd_lit)
-                (kwd_lit))))
-          (quasi_quoting_lit
-            (list_lit
-              (call_expr
-                (sym_lit
-                  (sym_name))
-                (unquoting_lit
+                    (sym_name))
                   (sym_lit
-                    (sym_name)))
-                (kwd_lit)
-                (kwd_lit)
-                (kwd_lit)
-                (unquoting_lit
+                    (sym_name))
                   (list_lit
                     (call_expr
                       (sym_lit
                         (sym_name))
                       (sym_lit
-                        (sym_name)))))))))))))
-
-================================================================================
-Functions - Kwarg
-================================================================================
-
-(defmacro dotimes (var &key (label #f) (another-label) &rest body)
-  (+ 1 2))
-
---------------------------------------------------------------------------------
-
-(source
-  (list_lit
-    (defun_expr
-      (sym_name)
-      (sym_lit
-        (sym_name))
-      (param_list
-        (param
-          (sym_lit
-            (sym_name)))
-        (param
-          (sym_lit
-            (sym_name)))
-        (param
-          (kwarg_param
-            (sym_lit
-              (sym_name))
-            (bool_lit)))
-        (param
-          (kwarg_param
-            (sym_lit
-              (sym_name))))
-        (param
-          (sym_lit
-            (sym_name)))
-        (param
-          (sym_lit
-            (sym_name))))
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))))))
+              (list_lit
+                (call_expr
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))))
+              (list_lit
+                (call_expr
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))
+                  (list_lit
+                    (call_expr
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))))))
+              (list_lit
+                (call_expr
+                  (sym_lit
+                    (sym_name))
+                  (list_lit
+                    (call_expr
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))))
+                  (list_lit
+                    (call_expr
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))))))
+              (list_lit
+                (call_expr
+                  (sym_lit
+                    (sym_name))
+                  (list_lit
+                    (list_lit
+                      (call_expr
+                        (sym_lit
+                          (sym_name))
+                        (list_lit
+                          (call_expr
+                            (sym_lit
+                              (sym_name))
+                            (sym_lit
+                              (sym_name))
+                            (sym_lit
+                              (sym_name))))))
+                    (list_lit
+                      (call_expr
+                        (sym_lit
+                          (sym_name))
+                        (num_lit)))
+                    (list_lit
+                      (call_expr
+                        (sym_lit
+                          (sym_name))
+                        (list_lit
+                          (call_expr
+                            (sym_lit
+                              (sym_name))
+                            (num_lit)
+                            (list_lit
+                              (call_expr
+                                (sym_lit
+                                  (sym_name))
+                                (sym_lit
+                                  (sym_name))
+                                (sym_lit
+                                  (sym_name))))))))
+                    (list_lit
+                      (call_expr
+                        (sym_lit
+                          (sym_name))
+                        (list_lit
+                          (call_expr
+                            (sym_lit
+                              (sym_name))
+                            (sym_lit
+                              (sym_name))
+                            (list_lit
+                              (call_expr
+                                (sym_lit
+                                  (sym_name))
+                                (num_lit)
+                                (sym_lit
+                                  (sym_name))))
+                            (sym_lit
+                              (sym_name)))))))
+                  (list_lit
+                    (call_expr
+                      (sym_lit
+                        (sym_name))
+                      (list_lit
+                        (call_expr
+                          (sym_lit
+                            (sym_name))
+                          (sym_lit
+                            (sym_name))
+                          (sym_lit
+                            (sym_name))))
+                      (sym_lit
+                        (sym_name))))))))
+          (list_lit
+            (call_expr
+              (sym_lit
+                (sym_name))
+              (list_lit
+                (call_expr
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))))
+              (list_lit
+                (call_expr
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))
+                  (list_lit
+                    (call_expr
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))))))
+              (list_lit
+                (call_expr
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))))))))
       (list_lit
         (call_expr
           (sym_lit
             (sym_name))
-          (num_lit)
-          (num_lit))))))
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name))))
+      (list_lit
+        (null_lit)))))
