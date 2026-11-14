@@ -106,8 +106,10 @@ const DIGIT_SYMBOL = token(
   seq(repeat1(DIGIT), SYMBOL_BODY, repeat(SYMBOL_BODY)),
 );
 
-// TODO - defmethod and defstate
-const DEFUN_LIKE = choice("defun", "defmacro");
+// TODO - defmethod
+// - lambdas
+// actual function test with arg list
+const DEFUN_LIKE = choice("defun", "defmacro", "desfun");
 
 const DEFENUM = choice("defenum");
 
@@ -118,7 +120,11 @@ module.exports = grammar({
 
   extras: ($) => [],
 
-  conflicts: ($) => [[$.defun_expr]],
+  conflicts: ($) => [
+    [$.behavior_expr],
+    [$.defstate_expr],
+    [$._form, $.typed_param],
+  ],
 
   inline: ($) => [$._sym_unqualified],
 
@@ -383,8 +389,86 @@ module.exports = grammar({
         ")",
       ),
 
+    defstate_expr: ($) =>
+      prec(
+        2,
+        seq(
+          "(",
+          "defstate",
+          repeat($._gap),
+          field("name", $.sym_lit),
+          repeat1($._gap),
+          field("parent", $.state_parent),
+          optional(
+            seq(
+              repeat1($._gap),
+              optional(field("docstring", $.str_lit)),
+              repeat(choice($._defstate_field, $._gap)),
+            ),
+          ),
+          repeat($._gap),
+          ")",
+        ),
+      ),
+
+    state_parent: ($) => seq("(", field("name", $.sym_lit), ")"),
+
+    _defstate_field: ($) =>
+      choice(
+        $.keyword_pair, // :virtual #t
+        $.event_handler,
+        $.enter_handler,
+        $.exit_handler,
+        $.code_handler,
+        $.post_handler,
+      ),
+
+    event_handler: ($) => seq(":event", repeat($._gap), $.sym_lit),
+
+    enter_handler: ($) =>
+      seq(":enter", repeat($._gap), choice($.behavior_expr, $.sym_lit)),
+
+    exit_handler: ($) =>
+      seq(":exit", repeat($._gap), choice($.behavior_expr, $.sym_lit)),
+
+    code_handler: ($) => seq(":code", repeat($._gap), $.sym_lit),
+
+    post_handler: ($) =>
+      seq(":post", repeat($._gap), choice($.behavior_expr, $.sym_lit)),
+
+    behavior_expr: ($) =>
+      prec(
+        2,
+        seq(
+          field("open", "("),
+          field("keyword", "behavior"),
+          repeat($._gap),
+          field("params", $.param_list),
+          optional(
+            seq(
+              repeat1($._gap),
+              choice(
+                field("docstring", $.str_lit),
+                field("body", $._form_without_string),
+              ),
+              repeat(choice(field("body", $._form), $._gap)),
+            ),
+          ),
+          repeat($._gap),
+          field("close", ")"),
+        ),
+      ),
+
     list_lit: ($) =>
-      choice($.type_def, $.defun_expr, $.defenum_expr, $.call_expr, $._bare_list_lit),
+      choice(
+        $.type_def,
+        $.defun_expr,
+        $.defenum_expr,
+        $.defstate_expr,
+        $.behavior_expr,
+        $.call_expr,
+        $._bare_list_lit,
+      ),
 
     _bare_list_lit: ($) =>
       seq(
@@ -393,7 +477,17 @@ module.exports = grammar({
         field("close", ")"),
       ),
 
-    param: ($) => choice($.sym_lit, $.kwarg_param),
+    typed_param: ($) =>
+      seq(
+        "(",
+        field("name", $.sym_lit),
+        repeat1($._gap),
+        field("type", $.sym_lit),
+        repeat($._gap),
+        ")",
+      ), // TODO - find a kwarg with default example add to corpus
+
+    param: ($) => choice($.sym_lit, $.typed_param, $.kwarg_param),
 
     kwarg_param: ($) =>
       seq(
