@@ -6,13 +6,15 @@
   "types": "bindings/node",
   "scripts": {
     "gen": "yarn tree-sitter generate",
-    "wasm": "yarn tree-sitter build --wasm",
+    "wasm": "yarn tree-sitter generate && yarn tree-sitter build --wasm",
+    "wasm:watch": "watchexec -w grammar.js -- yarn wasm",
     "test": "yarn tree-sitter generate && yarn tree-sitter test",
     "test-update": "yarn tree-sitter generate && yarn tree-sitter test --update",
     "parse-sample": "yarn gen && yarn tree-sitter parse test/samples/sample.gc",
     "parse-test": "yarn gen && yarn tree-sitter parse test/samples/test.gc",
     "install": "node-gyp-build",
-    "prebuildify": "prebuildify --napi --strip"
+    "prebuildify": "prebuildify --napi --strip",
+    "play": "yarn tree-sitter playground"
   },
   "repository": {
     "type": "git",

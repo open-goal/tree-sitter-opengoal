@@ -1,0 +1,130 @@
+================================================================================
+Type Definition
+================================================================================
+
+(deftype talker (process)
+  "example docstring"
+  ((trans           vector  :inline)
+   (message         talker-speech-class)
+   (total-time      time-frame)
+   (total-off-time  time-frame)
+   (start-time      time-frame)
+   (state-time      time-frame)
+   (voicebox        handle)
+   (voice-id        sound-id)
+   (message-id      sound-id)
+   (region          region)
+   (interp          float)
+   (save?           symbol)
+   (grab?           symbol)
+   )
+  (:state-methods
+    idle
+    active
+    (exit int)
+    )
+  (:methods
+    (draw-text (_type_) none)
+    )
+  )
+
+--------------------------------------------------------------------------------
+
+(source
+  (list_lit
+    (type_def
+      (sym_lit
+        (sym_name))
+      (type_parent
+        (sym_lit
+          (sym_name)))
+      (str_lit)
+      (type_field_list
+        (type_field
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name))
+          (kwd_lit))
+        (type_field
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name)))
+        (type_field
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name)))
+        (type_field
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name)))
+        (type_field
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name)))
+        (type_field
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name)))
+        (type_field
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name)))
+        (type_field
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name)))
+        (type_field
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name)))
+        (type_field
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name)))
+        (type_field
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name)))
+        (type_field
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name)))
+        (type_field
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name))))
+      (type_state_methods
+        (state_method
+          (sym_lit
+            (sym_name)))
+        (state_method
+          (sym_lit
+            (sym_name)))
+        (state_method
+          (state_method_signature
+            (sym_lit
+              (sym_name))
+            (sym_lit
+              (sym_name)))))
+      (type_methods
+        (method_definition
+          (sym_lit
+            (sym_name))
+          (param_list
+            (param
+              (sym_lit
+                (sym_name))))
+          (null_lit))))))

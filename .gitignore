@@ -13,5 +13,4 @@ build
 src.current/
 .yarn/
 .yarnrc.yml
-
 .DS_Store

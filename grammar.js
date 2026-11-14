@@ -106,14 +106,19 @@ const DIGIT_SYMBOL = token(
   seq(repeat1(DIGIT), SYMBOL_BODY, repeat(SYMBOL_BODY)),
 );
 
+// TODO - defmethod and defstate
 const DEFUN_LIKE = choice("defun", "defmacro");
+
+const TYPE_DEF = choice("deftype");
 
 module.exports = grammar({
   name: "opengoal",
 
   extras: ($) => [],
 
-  conflicts: ($) => [],
+  conflicts: ($) => [
+    // [$.defun_expr],
+  ],
 
   inline: ($) => [$._sym_unqualified],
 
@@ -225,7 +230,113 @@ module.exports = grammar({
     _sym_unqualified: ($) =>
       field("name", alias(choice("/", SYMBOL), $.sym_name)),
 
-    list_lit: ($) => choice($.defun_expr, $.call_expr, $._bare_list_lit),
+    type_field_list: ($) =>
+      seq("(", repeat(choice(field("field", $.type_field), $._gap)), ")"),
+
+    type_field: ($) =>
+      seq(
+        "(",
+        field("name", $.sym_lit),
+        repeat1($._gap),
+        field("type", $._type_ref),
+        repeat(seq(repeat1($._gap), field("option", $.kwd_lit))),
+        ")",
+      ),
+
+    type_states: ($) =>
+      seq(
+        "(",
+        ":states",
+        repeat(choice(field("state", $.sym_lit), $._gap)),
+        ")",
+      ),
+
+    type_state_methods: ($) =>
+      seq(
+        "(",
+        ":state-methods",
+        repeat(choice(field("method", $.state_method), $._gap)),
+        ")",
+      ),
+
+    state_method: ($) => choice($.sym_lit, $.state_method_signature),
+
+    state_method_signature: ($) =>
+      seq(
+        "(",
+
+        field("name", $.sym_lit),
+
+        repeat1($._gap),
+
+        field("param_type", $.sym_lit),
+
+        repeat(choice(field("param_type", $.sym_lit), $._gap)),
+
+        ")",
+      ),
+
+    type_methods: ($) =>
+      seq(
+        "(",
+        ":methods",
+        repeat(choice(field("method", $.method_definition), $._gap)),
+        ")",
+      ),
+
+    _type_ref: ($) => choice($.sym_lit, $.null_lit),
+
+    method_definition: ($) =>
+      seq(
+        "(",
+        field("name", $.sym_lit),
+        repeat($._gap),
+        field("params", $.param_list),
+        repeat($._gap),
+        field("return_type", $._type_ref),
+        ")",
+      ),
+
+    type_def: ($) =>
+      prec(
+        2,
+        seq(
+          field("open", "("),
+          field("keyword", "deftype"),
+
+          repeat($._gap),
+
+          field("name", $.sym_lit),
+
+          repeat($._gap),
+
+          optional(field("parent", $.type_parent)),
+
+          repeat($._gap),
+
+          optional(field("docstring", $.str_lit)),
+
+          repeat($._gap),
+
+          field("fields", $.type_field_list),
+
+          repeat(
+            choice(
+              field("section", $.type_states),
+              field("section", $.type_state_methods),
+              field("section", $.type_methods),
+              $._gap,
+            ),
+          ),
+
+          field("close", ")"),
+        ),
+      ),
+
+    type_parent: ($) => seq("(", field("name", $.sym_lit), ")"),
+
+    list_lit: ($) =>
+      choice($.type_def, $.defun_expr, $.call_expr, $._bare_list_lit),
 
     _bare_list_lit: ($) =>
       seq(
@@ -248,17 +359,18 @@ module.exports = grammar({
     param_list: ($) =>
       seq("(", repeat(choice(field("param", $.param), $._gap)), ")"),
 
-    defun_expr: ($) =>
-      seq(
-        field("open", "("),
-        field("keyword", alias(DEFUN_LIKE, $.sym_name)),
-        repeat($._gap),
-        field("name", $.sym_lit),
-        repeat($._gap),
-        field("params", $.param_list),
-        repeat(choice(field("body", $._form), $._gap)),
-        field("close", ")"),
-      ),
+      defun_expr: ($) =>
+        seq(
+          field("open", "("),
+          field("keyword", alias(DEFUN_LIKE, $.sym_name)),
+          repeat($._gap),
+          field("name", $.sym_lit),
+          repeat($._gap),
+          field("params", $.param_list),
+          optional(field("docstring", $.str_lit)),
+          repeat(choice(field("body", $._form), $._gap)),
+          field("close", ")"),
+        ),
 
     call_expr: ($) =>
       prec(
