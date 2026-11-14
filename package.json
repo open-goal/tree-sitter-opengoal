@@ -9,12 +9,13 @@
     "wasm": "yarn tree-sitter generate && yarn tree-sitter build --wasm",
     "wasm:watch": "watchexec -w grammar.js -- yarn wasm",
     "test": "yarn tree-sitter generate && yarn tree-sitter test",
-    "test-update": "yarn tree-sitter generate && yarn tree-sitter test --update",
+    "test:update": "yarn tree-sitter generate && yarn tree-sitter test --update",
     "parse-sample": "yarn gen && yarn tree-sitter parse test/samples/sample.gc",
     "parse-test": "yarn gen && yarn tree-sitter parse test/samples/test.gc",
     "install": "node-gyp-build",
     "prebuildify": "prebuildify --napi --strip",
-    "play": "yarn tree-sitter playground"
+    "play": "yarn tree-sitter playground -q --grammar-path ./",
+    "play:watch": "watchexec --restart -w grammar.js -- bash ./watch-play.sh"
   },
   "repository": {
     "type": "git",

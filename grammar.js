@@ -109,6 +109,8 @@ const DIGIT_SYMBOL = token(
 // TODO - defmethod and defstate
 const DEFUN_LIKE = choice("defun", "defmacro");
 
+const DEFENUM = choice("defenum");
+
 const TYPE_DEF = choice("deftype");
 
 module.exports = grammar({
@@ -116,9 +118,7 @@ module.exports = grammar({
 
   extras: ($) => [],
 
-  conflicts: ($) => [
-    // [$.defun_expr],
-  ],
+  conflicts: ($) => [[$.defun_expr]],
 
   inline: ($) => [$._sym_unqualified],
 
@@ -136,16 +136,29 @@ module.exports = grammar({
 
     _form: ($) =>
       choice(
-        $.num_lit, // atom-ish
+        $.num_lit,
         $.kwd_lit,
         $.str_lit,
         $.char_lit,
         $.null_lit,
         $.bool_lit,
         $.sym_lit,
-        // basic collection-ish
         $.list_lit,
-        // some other reader macros
+        $.quoting_lit,
+        $.quasi_quoting_lit,
+        $.unquote_splicing_lit,
+        $.unquoting_lit,
+      ),
+
+    _form_without_string: ($) =>
+      choice(
+        $.num_lit,
+        $.kwd_lit,
+        $.char_lit,
+        $.null_lit,
+        $.bool_lit,
+        $.sym_lit,
+        $.list_lit,
         $.quoting_lit,
         $.quasi_quoting_lit,
         $.unquote_splicing_lit,
@@ -302,7 +315,7 @@ module.exports = grammar({
         2,
         seq(
           field("open", "("),
-          field("keyword", "deftype"),
+          field("keyword", TYPE_DEF),
 
           repeat($._gap),
 
@@ -335,8 +348,43 @@ module.exports = grammar({
 
     type_parent: ($) => seq("(", field("name", $.sym_lit), ")"),
 
+    defenum_expr: ($) =>
+      prec(
+        1,
+        seq(
+          field("open", "("),
+          field("keyword", alias(DEFENUM, $.sym_name)),
+          repeat($._gap),
+
+          field("name", $.sym_lit),
+
+          repeat(
+            choice(
+              $._gap,
+              field("option", $.keyword_pair),
+              field("entry", $.enum_entry),
+            ),
+          ),
+
+          field("close", ")"),
+        ),
+      ),
+
+    keyword_pair: ($) =>
+      seq(field("keyword", $.kwd_lit), repeat($._gap), field("value", $._form)),
+
+    enum_entry: ($) =>
+      seq(
+        "(",
+        repeat($._gap),
+        field("name", $.sym_lit),
+        optional(seq(repeat1($._gap), field("value", $.num_lit))),
+        repeat($._gap),
+        ")",
+      ),
+
     list_lit: ($) =>
-      choice($.type_def, $.defun_expr, $.call_expr, $._bare_list_lit),
+      choice($.type_def, $.defun_expr, $.defenum_expr, $.call_expr, $._bare_list_lit),
 
     _bare_list_lit: ($) =>
       seq(
@@ -359,18 +407,27 @@ module.exports = grammar({
     param_list: ($) =>
       seq("(", repeat(choice(field("param", $.param), $._gap)), ")"),
 
-      defun_expr: ($) =>
-        seq(
-          field("open", "("),
-          field("keyword", alias(DEFUN_LIKE, $.sym_name)),
-          repeat($._gap),
-          field("name", $.sym_lit),
-          repeat($._gap),
-          field("params", $.param_list),
-          optional(field("docstring", $.str_lit)),
-          repeat(choice(field("body", $._form), $._gap)),
-          field("close", ")"),
+    defun_expr: ($) =>
+      seq(
+        field("open", "("),
+        field("keyword", alias(DEFUN_LIKE, $.sym_name)),
+        repeat($._gap),
+        field("name", $.sym_lit),
+        repeat($._gap),
+        field("params", $.param_list),
+        optional(
+          seq(
+            repeat1($._gap),
+            choice(
+              field("docstring", $.str_lit),
+              field("body", $._form_without_string),
+            ),
+            repeat(choice(field("body", $._form), $._gap)),
+          ),
         ),
+        repeat($._gap),
+        field("close", ")"),
+      ),
 
     call_expr: ($) =>
       prec(
