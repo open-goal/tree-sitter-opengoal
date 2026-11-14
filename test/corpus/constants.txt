@@ -5,3 +5,20 @@ Constants - Basic Example
 (defconstant VU0_DATA_MEM_MAP (the (pointer uint32) #x11004000))
 
 --------------------------------------------------------------------------------
+
+(source
+  (list_lit
+    (defconstant_expr
+      (sym_lit
+        (sym_name))
+      (list_lit
+        (call_expr
+          (sym_lit
+            (sym_name))
+          (list_lit
+            (call_expr
+              (sym_lit
+                (sym_name))
+              (sym_lit
+                (sym_name))))
+          (num_lit))))))

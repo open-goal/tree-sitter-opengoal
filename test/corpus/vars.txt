@@ -1,0 +1,609 @@
+================================================================================
+Variables - Basic Example
+================================================================================
+
+(define *dm-cam-mode-interpolation* 0)
+
+--------------------------------------------------------------------------------
+
+(source
+  (list_lit
+    (define_expr
+      (sym_lit
+        (sym_name))
+      (num_lit))))
+
+================================================================================
+Variables - Let
+================================================================================
+
+(defmethod relocate ((this editable-player) (offset int))
+  (let ((v1-0 *kernel-context*))
+    (set! (-> v1-0 relocating-process) this)
+    (set! (-> v1-0 relocating-min) (the-as int (&-> this type)))
+    (set! (-> v1-0 relocating-max)
+          (the-as int (+ (+ (-> this allocated-length) -4 (-> process size)) (the-as int this)))
+          )
+    (set! (-> v1-0 relocating-offset) offset)
+    )
+  (let ((v1-2 (-> this current)))
+    (if (and (>= (the-as int v1-2) (-> *kernel-context* relocating-min))
+             (< (the-as int v1-2) (-> *kernel-context* relocating-max))
+             )
+        (&+! (-> this current) offset)
+        )
+    )
+  (the-as editable-player ((method-of-type process-drawable relocate) this offset))
+  )
+
+--------------------------------------------------------------------------------
+
+(source
+  (list_lit
+    (defmethod_expr
+      (sym_lit
+        (sym_name))
+      (method_param_list
+        (typed_param
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name)))
+        (param
+          (typed_param
+            (sym_lit
+              (sym_name))
+            (sym_lit
+              (sym_name)))))
+      (list_lit
+        (binding_expr
+          (sym_name)
+          (binding_list
+            (local_binding
+              (sym_lit
+                (sym_name))
+              (sym_lit
+                (sym_name))))
+          (list_lit
+            (call_expr
+              (sym_lit
+                (sym_name))
+              (list_lit
+                (call_expr
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))))
+              (sym_lit
+                (sym_name))))
+          (list_lit
+            (call_expr
+              (sym_lit
+                (sym_name))
+              (list_lit
+                (call_expr
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))))
+              (list_lit
+                (call_expr
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))
+                  (list_lit
+                    (call_expr
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))))))))
+          (list_lit
+            (call_expr
+              (sym_lit
+                (sym_name))
+              (list_lit
+                (call_expr
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))))
+              (list_lit
+                (call_expr
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))
+                  (list_lit
+                    (call_expr
+                      (sym_lit
+                        (sym_name))
+                      (list_lit
+                        (call_expr
+                          (sym_lit
+                            (sym_name))
+                          (list_lit
+                            (call_expr
+                              (sym_lit
+                                (sym_name))
+                              (sym_lit
+                                (sym_name))
+                              (sym_lit
+                                (sym_name))))
+                          (num_lit)
+                          (list_lit
+                            (call_expr
+                              (sym_lit
+                                (sym_name))
+                              (sym_lit
+                                (sym_name))
+                              (sym_lit
+                                (sym_name))))))
+                      (list_lit
+                        (call_expr
+                          (sym_lit
+                            (sym_name))
+                          (sym_lit
+                            (sym_name))
+                          (sym_lit
+                            (sym_name))))))))))
+          (list_lit
+            (call_expr
+              (sym_lit
+                (sym_name))
+              (list_lit
+                (call_expr
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))))
+              (sym_lit
+                (sym_name))))))
+      (list_lit
+        (binding_expr
+          (sym_name)
+          (binding_list
+            (local_binding
+              (sym_lit
+                (sym_name))
+              (list_lit
+                (call_expr
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))))))
+          (list_lit
+            (call_expr
+              (sym_lit
+                (sym_name))
+              (list_lit
+                (call_expr
+                  (sym_lit
+                    (sym_name))
+                  (list_lit
+                    (call_expr
+                      (sym_lit
+                        (sym_name))
+                      (list_lit
+                        (call_expr
+                          (sym_lit
+                            (sym_name))
+                          (sym_lit
+                            (sym_name))
+                          (sym_lit
+                            (sym_name))))
+                      (list_lit
+                        (call_expr
+                          (sym_lit
+                            (sym_name))
+                          (sym_lit
+                            (sym_name))
+                          (sym_lit
+                            (sym_name))))))
+                  (list_lit
+                    (call_expr
+                      (sym_lit
+                        (sym_name))
+                      (list_lit
+                        (call_expr
+                          (sym_lit
+                            (sym_name))
+                          (sym_lit
+                            (sym_name))
+                          (sym_lit
+                            (sym_name))))
+                      (list_lit
+                        (call_expr
+                          (sym_lit
+                            (sym_name))
+                          (sym_lit
+                            (sym_name))
+                          (sym_lit
+                            (sym_name))))))))
+              (list_lit
+                (call_expr
+                  (sym_lit
+                    (sym_name))
+                  (list_lit
+                    (call_expr
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))))
+                  (sym_lit
+                    (sym_name))))))))
+      (list_lit
+        (call_expr
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name))
+          (list_lit
+            (list_lit
+              (call_expr
+                (sym_lit
+                  (sym_name))
+                (sym_lit
+                  (sym_name))
+                (sym_lit
+                  (sym_name))))
+            (sym_lit
+              (sym_name))
+            (sym_lit
+              (sym_name))))))))
+
+================================================================================
+Variables - Let*
+================================================================================
+
+(defmethod try-update-focus ((this enemy-focus) (arg0 process-focusable) (arg1 enemy))
+  (let* ((t9-0 (method-of-type focus try-update-focus))
+         (s3-0 (t9-0 this arg0))
+         )
+    (when (not s3-0)
+      (logclear! (-> this flags) (enemy-flag look-at-focus))
+      (set! (-> this aware)
+            (the-as
+              enemy-aware
+              (enemy-method-61 arg1 (the-as int (update-target-awareness! arg1 arg0 (the-as enemy-best-focus #f))))
+              )
+            )
+      )
+    s3-0
+    )
+  )
+
+--------------------------------------------------------------------------------
+
+(source
+  (list_lit
+    (defmethod_expr
+      (sym_lit
+        (sym_name))
+      (method_param_list
+        (typed_param
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name)))
+        (param
+          (typed_param
+            (sym_lit
+              (sym_name))
+            (sym_lit
+              (sym_name))))
+        (param
+          (typed_param
+            (sym_lit
+              (sym_name))
+            (sym_lit
+              (sym_name)))))
+      (list_lit
+        (binding_expr
+          (sym_name)
+          (binding_list
+            (local_binding
+              (sym_lit
+                (sym_name))
+              (list_lit
+                (call_expr
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name)))))
+            (local_binding
+              (sym_lit
+                (sym_name))
+              (list_lit
+                (call_expr
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))))))
+          (list_lit
+            (call_expr
+              (sym_lit
+                (sym_name))
+              (list_lit
+                (call_expr
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))))
+              (list_lit
+                (call_expr
+                  (sym_lit
+                    (sym_name))
+                  (list_lit
+                    (call_expr
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))))
+                  (list_lit
+                    (call_expr
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))))))
+              (list_lit
+                (call_expr
+                  (sym_lit
+                    (sym_name))
+                  (list_lit
+                    (call_expr
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))))
+                  (list_lit
+                    (call_expr
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))
+                      (list_lit
+                        (call_expr
+                          (sym_lit
+                            (sym_name))
+                          (sym_lit
+                            (sym_name))
+                          (list_lit
+                            (call_expr
+                              (sym_lit
+                                (sym_name))
+                              (sym_lit
+                                (sym_name))
+                              (list_lit
+                                (call_expr
+                                  (sym_lit
+                                    (sym_name))
+                                  (sym_lit
+                                    (sym_name))
+                                  (sym_lit
+                                    (sym_name))
+                                  (list_lit
+                                    (call_expr
+                                      (sym_lit
+                                        (sym_name))
+                                      (sym_lit
+                                        (sym_name))
+                                      (bool_lit)))))))))))))))
+          (sym_lit
+            (sym_name)))))))
+
+================================================================================
+Variables - dotimes
+================================================================================
+
+(defun string->talker-speech ((arg0 string))
+  (dotimes (s5-0 465)
+    (let ((s4-0 (-> *talker-speech* s5-0)))
+      (if (string= arg0 (-> s4-0 name))
+          (return s4-0)
+          )
+      )
+    )
+  (-> *talker-speech* 0)
+  )
+
+--------------------------------------------------------------------------------
+
+(source
+  (list_lit
+    (defun_expr
+      (sym_name)
+      (sym_lit
+        (sym_name))
+      (param_list
+        (param
+          (typed_param
+            (sym_lit
+              (sym_name))
+            (sym_lit
+              (sym_name)))))
+      (list_lit
+        (single_binding_expr
+          (sym_name)
+          (local_binding
+            (sym_lit
+              (sym_name))
+            (num_lit))
+          (list_lit
+            (binding_expr
+              (sym_name)
+              (binding_list
+                (local_binding
+                  (sym_lit
+                    (sym_name))
+                  (list_lit
+                    (call_expr
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))))))
+              (list_lit
+                (call_expr
+                  (sym_lit
+                    (sym_name))
+                  (list_lit
+                    (call_expr
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))
+                      (list_lit
+                        (call_expr
+                          (sym_lit
+                            (sym_name))
+                          (sym_lit
+                            (sym_name))
+                          (sym_lit
+                            (sym_name))))))
+                  (list_lit
+                    (call_expr
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))))))))))
+      (list_lit
+        (call_expr
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name))
+          (num_lit))))))
+
+================================================================================
+Variables - countdown
+================================================================================
+
+(defmethod update-time-stamp ((this art-joint-anim-manager) (arg0 art-joint-anim))
+  (countdown (v1-0 (-> this free-index))
+    (when (= arg0 (-> this slot v1-0 anim))
+      (set! (-> this slot v1-0 time-stamp) (the-as uint (-> *display* base-clock frame-counter)))
+      (return arg0)
+      )
+    )
+  arg0
+  )
+
+--------------------------------------------------------------------------------
+
+(source
+  (list_lit
+    (defmethod_expr
+      (sym_lit
+        (sym_name))
+      (method_param_list
+        (typed_param
+          (sym_lit
+            (sym_name))
+          (sym_lit
+            (sym_name)))
+        (param
+          (typed_param
+            (sym_lit
+              (sym_name))
+            (sym_lit
+              (sym_name)))))
+      (list_lit
+        (single_binding_expr
+          (sym_name)
+          (local_binding
+            (sym_lit
+              (sym_name))
+            (list_lit
+              (call_expr
+                (sym_lit
+                  (sym_name))
+                (sym_lit
+                  (sym_name))
+                (sym_lit
+                  (sym_name)))))
+          (list_lit
+            (call_expr
+              (sym_lit
+                (sym_name))
+              (list_lit
+                (call_expr
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))
+                  (list_lit
+                    (call_expr
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))))))
+              (list_lit
+                (call_expr
+                  (sym_lit
+                    (sym_name))
+                  (list_lit
+                    (call_expr
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))))
+                  (list_lit
+                    (call_expr
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))
+                      (list_lit
+                        (call_expr
+                          (sym_lit
+                            (sym_name))
+                          (sym_lit
+                            (sym_name))
+                          (sym_lit
+                            (sym_name))
+                          (sym_lit
+                            (sym_name))))))))
+              (list_lit
+                (call_expr
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))))))))
+      (sym_lit
+        (sym_name)))))

@@ -112,6 +112,9 @@ const DEFENUM = choice("defenum");
 
 const TYPE_DEF = choice("deftype");
 
+const MULTI_BINDING_FORMS = choice("let", "let*");
+const SINGLE_BINDING_FORMS = choice("dotimes", "countdown");
+
 module.exports = grammar({
   name: "opengoal",
 
@@ -173,8 +176,6 @@ module.exports = grammar({
     kwd_lit: ($) => KEYWORD,
 
     // https://opengoal.dev/docs/reference/lib/#format
-    // TODO - a lot of this might be irrelevant or not comprehensive in terms of OpenGOAL's
-    // but to be honest, most of these rare features are never used
     _format_token: ($) =>
       choice(alias(NUMBER, $.num_lit), seq("'", alias(/./, $.char_lit))),
     format_prefix_parameters: (_) => choice("v", "V", "#"),
@@ -542,6 +543,51 @@ module.exports = grammar({
         ),
       ),
 
+    binding_expr: ($) =>
+      prec(
+        2,
+        seq(
+          "(",
+          field("keyword", alias(MULTI_BINDING_FORMS, $.sym_name)),
+          repeat($._gap),
+          field("bindings", $.binding_list),
+          repeat1($._gap),
+          field("body", $._form),
+          repeat(choice(field("body", $._form), $._gap)),
+          repeat($._gap),
+          ")",
+        ),
+      ),
+
+    binding_list: ($) =>
+      seq("(", repeat(choice(field("binding", $.local_binding), $._gap)), ")"),
+
+    local_binding: ($) =>
+      seq(
+        "(",
+        field("name", $.sym_lit),
+        repeat1($._gap),
+        field("value", $._form),
+        repeat($._gap),
+        ")",
+      ),
+
+    single_binding_expr: ($) =>
+      prec(
+        2,
+        seq(
+          "(",
+          field("keyword", alias(SINGLE_BINDING_FORMS, $.sym_name)),
+          repeat($._gap),
+          field("binding", $.local_binding),
+          repeat1($._gap),
+          field("body", $._form),
+          repeat(choice(field("body", $._form), $._gap)),
+          repeat($._gap),
+          ")",
+        ),
+      ),
+
     list_lit: ($) =>
       choice(
         $.type_def,
@@ -553,6 +599,8 @@ module.exports = grammar({
         $.define_expr,
         $.behavior_expr,
         $.lambda_expr,
+        $.binding_expr,
+        $.single_binding_expr,
         $.call_expr,
         $._bare_list_lit,
       ),

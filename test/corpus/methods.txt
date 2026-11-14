@@ -44,55 +44,50 @@ Methods - Basic Example
               (sym_name)))))
       (str_lit)
       (list_lit
-        (call_expr
-          (sym_lit
-            (sym_name))
-          (list_lit
-            (list_lit
-              (call_expr
-                (sym_lit
-                  (sym_name))
-                (list_lit
-                  (call_expr
-                    (sym_lit
-                      (sym_name))
-                    (sym_lit
-                      (sym_name))
-                    (sym_lit
-                      (sym_name))
-                    (sym_lit
-                      (sym_name)))))))
-          (list_lit
-            (call_expr
+        (binding_expr
+          (sym_name)
+          (binding_list
+            (local_binding
               (sym_lit
                 (sym_name))
               (list_lit
-                (list_lit
-                  (call_expr
-                    (sym_lit
-                      (sym_name))
-                    (list_lit
-                      (call_expr
-                        (sym_lit
-                          (sym_name))
-                        (sym_lit
-                          (sym_name))
-                        (sym_lit
-                          (sym_name))))))
-                (list_lit
-                  (call_expr
-                    (sym_lit
-                      (sym_name))
-                    (list_lit
-                      (call_expr
-                        (sym_lit
-                          (sym_name))
-                        (sym_lit
-                          (sym_name))
-                        (sym_lit
-                          (sym_name))
-                        (sym_lit
-                          (sym_name)))))))
+                (call_expr
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))
+                  (sym_lit
+                    (sym_name))))))
+          (list_lit
+            (binding_expr
+              (sym_name)
+              (binding_list
+                (local_binding
+                  (sym_lit
+                    (sym_name))
+                  (list_lit
+                    (call_expr
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name)))))
+                (local_binding
+                  (sym_lit
+                    (sym_name))
+                  (list_lit
+                    (call_expr
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))
+                      (sym_lit
+                        (sym_name))))))
               (list_lit
                 (call_expr
                   (sym_lit
