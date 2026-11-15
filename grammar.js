@@ -226,7 +226,10 @@ module.exports = grammar({
         repeat(
           choice(
             token.immediate(prec(1, /[^\\~"]+/)),
-            token.immediate(seq(/\\./)),
+            alias(
+              token.immediate(seq(/\\./)),
+              $.string_escape
+            ),
             $.format_specifier,
           ),
         ),

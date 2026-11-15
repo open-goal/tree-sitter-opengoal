@@ -209,7 +209,7 @@ static const char * const ts_symbol_names[] = {
   [aux_sym_format_directive_type_token11] = "format_directive_type_token11",
   [anon_sym_DQUOTE] = "\"",
   [aux_sym_str_lit_token1] = "str_lit_token1",
-  [aux_sym_str_lit_token2] = "str_lit_token2",
+  [aux_sym_str_lit_token2] = "string_escape",
   [sym_char_lit] = "char_lit",
   [sym_null_lit] = "null_lit",
   [sym_bool_lit] = "bool_lit",
@@ -639,8 +639,8 @@ static const TSSymbolMetadata ts_symbol_metadata[] = {
     .named = false,
   },
   [aux_sym_str_lit_token2] = {
-    .visible = false,
-    .named = false,
+    .visible = true,
+    .named = true,
   },
   [sym_char_lit] = {
     .visible = true,

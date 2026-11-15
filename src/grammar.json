@@ -762,16 +762,21 @@
                 }
               },
               {
-                "type": "IMMEDIATE_TOKEN",
+                "type": "ALIAS",
                 "content": {
-                  "type": "SEQ",
-                  "members": [
-                    {
-                      "type": "PATTERN",
-                      "value": "\\\\."
-                    }
-                  ]
-                }
+                  "type": "IMMEDIATE_TOKEN",
+                  "content": {
+                    "type": "SEQ",
+                    "members": [
+                      {
+                        "type": "PATTERN",
+                        "value": "\\\\."
+                      }
+                    ]
+                  }
+                },
+                "named": true,
+                "value": "string_escape"
               },
               {
                 "type": "SYMBOL",
